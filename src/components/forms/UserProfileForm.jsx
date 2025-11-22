@@ -71,7 +71,7 @@ export default function UserProfileForm() {
         ))}
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-2">
         <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
           Deneyim seviyesi
           <select
@@ -105,21 +105,6 @@ export default function UserProfileForm() {
               {profile.availability} gün
             </div>
           </div>
-        </label>
-        <label className="flex flex-col gap-2 text-sm font-medium text-slate-200 md:col-span-3 lg:col-span-1">
-          Split tipi
-          <select
-            name="splitStyle"
-            value={profile.splitStyle}
-            onChange={handleProfileChange}
-            className="rounded-xl border border-white/10 bg-slate-800/70 p-3 text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-500/40"
-          >
-            {splitOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
         </label>
       </section>
 
@@ -186,4 +171,6 @@ export default function UserProfileForm() {
     </form>
   );
 }
+
+
 

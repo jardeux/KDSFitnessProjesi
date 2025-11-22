@@ -1,6 +1,7 @@
 import UserProfileForm from './components/forms/UserProfileForm';
 import DecisionResults from './components/dashboard/DecisionResults';
 import WeeklyPlan from './components/dashboard/WeeklyPlan';
+import RegionalExerciseSelector from './components/dashboard/RegionalExerciseSelector';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <main className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <UserProfileForm />
           <div className="flex flex-col gap-6">
+            <RegionalExerciseSelector />
             <DecisionResults />
             <WeeklyPlan />
           </div>

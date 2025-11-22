@@ -130,7 +130,7 @@ export const generateWeeklyPlan = ({
       }
       
       // Eğer doğrudan eşleşme yoksa, targetMuscles array'inde ara
-      for (const [poolKey, poolList] of exercisePool.entries()) {
+      for (const poolList of exercisePool.values()) {
         if (poolList.length > 0) {
           const exercise = poolList[0];
           const matches = exercise.targetMuscles?.some(
@@ -246,4 +246,6 @@ export const generateWeeklyPlan = ({
     };
   });
 };
+
+
 

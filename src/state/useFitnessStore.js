@@ -72,6 +72,63 @@ const PROGRAM_CONFIG = {
   },
 };
 
+const PROGRAM_SPLIT_MAP = {
+  'Yüksek Yoğunluklu Kardiyo': 'fullBody',
+  'Ağır Ağırlık Antrenmanı': 'ppl',
+  'Yoga / Mobilite': 'fullBody',
+  Kalisthenik: 'upperLower',
+  default: 'fullBody',
+};
+
+const determineRegressionGoal = (programName = '') =>
+  programName.toLowerCase().includes('kardiyo') ? 'fat-loss' : 'muscle';
+
+const buildProgramArtifacts = async (programName = 'default', profile = {}) => {
+  const programConfig = PROGRAM_CONFIG[programName] || PROGRAM_CONFIG.default;
+  const splitKey = PROGRAM_SPLIT_MAP[programName] || PROGRAM_SPLIT_MAP.default;
+  const splitTemplate = SPLIT_TEMPLATES[splitKey] || null;
+  const templateLength = splitTemplate?.days?.length || 0;
+  const desiredDays = Number(profile.availability) || templateLength || 3;
+
+  const exercises = await fetchExercises({
+    filter: programConfig.filter,
+    mode: programConfig.mode,
+    filters: splitTemplate?.apiFilters || programConfig.filters,
+    limit: Math.max(
+      20,
+      (splitTemplate?.days?.reduce((sum, day) => sum + (day.exercises?.length || 0), 0) || 0) * 2,
+      desiredDays * 5 || 15,
+    ),
+  });
+
+  const workoutPlan = generateWeeklyPlan({
+    exercises,
+    availability: desiredDays,
+    focusTags: splitTemplate?.focusTags || programConfig.focusTags,
+    intensity: splitTemplate?.intensity || programConfig.intensity,
+    experience: profile.experience,
+    preferredTargets: splitTemplate?.preferredTargets || programConfig.hypertrophyTargets,
+    template: splitTemplate,
+  });
+
+  const regressionResult = buildRegressionPlan({
+    weight: Number(profile.weight) || 75,
+    availability: Number(profile.availability) || 3,
+    experience: profile.experience,
+    goal: determineRegressionGoal(programName),
+  });
+
+  return {
+    regressionResult,
+    programMeta: {
+      ...programConfig,
+      split: splitTemplate?.name,
+      splitStyle: splitKey,
+    },
+    workoutPlan,
+  };
+};
+
 const ALTERNATIVE_MATRIX = {
   'Yüksek Yoğunluklu Kardiyo': [0.25, 0.8, 0.85],
   'Ağır Ağırlık Antrenmanı': [0.9, 0.3, 0.4],
@@ -91,7 +148,6 @@ const defaultProfile = {
   height: '',
   experience: 'beginner',
   availability: 3,
-  splitStyle: 'ppl',
 };
 
 export const useFitnessStore = create((set, get) => ({
@@ -102,6 +158,7 @@ export const useFitnessStore = create((set, get) => ({
   recommendation: null,
   programMeta: null,
   workoutPlan: [],
+  selectedProgram: null,
   errors: null,
   isProcessing: false,
 
@@ -124,6 +181,7 @@ export const useFitnessStore = create((set, get) => ({
       recommendation: null,
       programMeta: null,
       workoutPlan: [],
+      selectedProgram: null,
       errors: null,
       isProcessing: false,
     }),
@@ -141,49 +199,21 @@ export const useFitnessStore = create((set, get) => ({
         ALTERNATIVE_MATRIX,
       );
 
-      const normalizedBestName = best?.name?.toLowerCase() || '';
-      const regressionResult = buildRegressionPlan({
-        weight: Number(profile.weight) || 75,
-        availability: Number(profile.availability) || 3,
-        experience: profile.experience,
-        goal: normalizedBestName.includes('kardiyo') ? 'fat-loss' : 'muscle',
-      });
+      const fallback = ranking?.[0];
+      const chosen = best || fallback;
+      if (!chosen) {
+        throw new Error('Geçerli bir program alternatifi bulunamadı.');
+      }
 
-      const programConfig = PROGRAM_CONFIG[best?.name] || PROGRAM_CONFIG.default;
-      const splitTemplate = SPLIT_TEMPLATES[profile.splitStyle] || null;
-      const desiredDays = Number(profile.availability) || splitTemplate?.days?.length || 3;
-
-      const exercises = await fetchExercises({
-        filter: programConfig.filter,
-        mode: programConfig.mode,
-        filters: splitTemplate?.apiFilters || programConfig.filters,
-        limit: Math.max(
-          20,
-          (splitTemplate?.days?.reduce((sum, day) => sum + (day.exercises?.length || 0), 0) || 0) * 2,
-          desiredDays * 5 || 15,
-        ),
-      });
-
-      const workoutPlan = generateWeeklyPlan({
-        exercises,
-        availability: desiredDays,
-        focusTags: splitTemplate?.focusTags || programConfig.focusTags,
-        intensity: splitTemplate?.intensity || programConfig.intensity,
-        experience: profile.experience,
-        preferredTargets: splitTemplate?.preferredTargets || programConfig.hypertrophyTargets,
-        template: splitTemplate,
-      });
+      const artifacts = await buildProgramArtifacts(chosen.name, profile);
 
       set({
         ahpResult: { ...ahpResult, ranking },
-        regressionResult,
-        recommendation: best,
-        programMeta: {
-          ...programConfig,
-          split: splitTemplate?.name,
-          splitStyle: profile.splitStyle,
-        },
-        workoutPlan,
+        regressionResult: artifacts.regressionResult,
+        recommendation: chosen,
+        programMeta: artifacts.programMeta,
+        workoutPlan: artifacts.workoutPlan,
+        selectedProgram: chosen.name,
         errors: null,
         isProcessing: false,
       });
@@ -192,5 +222,54 @@ export const useFitnessStore = create((set, get) => ({
       set({ errors: error.message, isProcessing: false });
     }
   },
+  selectProgram: async (programName) => {
+    const { ahpResult, profile, recommendation } = get();
+    if (!ahpResult?.ranking?.length || !programName || recommendation?.name === programName) {
+      return;
+    }
+
+    set({ isProcessing: true, errors: null });
+
+    try {
+      const candidate =
+        ahpResult.ranking.find((alt) => alt.name === programName) || ahpResult.ranking[0];
+
+      if (!candidate) {
+        throw new Error('Seçilecek program bulunamadı.');
+      }
+
+      const artifacts = await buildProgramArtifacts(candidate.name, profile);
+
+      set({
+        recommendation: candidate,
+        selectedProgram: candidate.name,
+        regressionResult: artifacts.regressionResult,
+        programMeta: artifacts.programMeta,
+        workoutPlan: artifacts.workoutPlan,
+        errors: null,
+        isProcessing: false,
+      });
+    } catch (error) {
+      console.error('Program selection error', error);
+      set({ errors: error.message, isProcessing: false });
+    }
+  },
+
 }));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

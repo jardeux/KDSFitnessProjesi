@@ -4,7 +4,15 @@ import { useFitnessStore, CRITERIA } from '../../state/useFitnessStore';
 const formatPercent = (value = 0) => `${(value * 100).toFixed(1)}%`;
 
 export default function DecisionResults() {
-  const { recommendation, ahpResult, regressionResult, programMeta, isProcessing } = useFitnessStore();
+  const {
+    recommendation,
+    ahpResult,
+    regressionResult,
+    programMeta,
+    isProcessing,
+    selectedProgram,
+    selectProgram,
+  } = useFitnessStore();
 
   const regressionSummary = useMemo(() => {
     if (!regressionResult?.projection?.length) return null;
@@ -56,6 +64,9 @@ export default function DecisionResults() {
             <span className="text-brand-200">{programMeta.filter}</span>
           </p>
         ) : null}
+        <p className="mt-2 text-xs text-slate-500">
+          AHP sıralamasındaki farklı bir programı tercih edersen aşağıdan seçebilirsin.
+        </p>
       </header>
 
       <div className="grid gap-4 rounded-2xl border border-white/5 bg-slate-950/40 p-4 md:grid-cols-2">
@@ -102,10 +113,28 @@ export default function DecisionResults() {
             {ahpResult.ranking.map((alt) => (
               <li
                 key={alt.name}
-                className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 px-4 py-2 text-sm text-white"
+                className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border px-4 py-2 text-sm text-white ${
+                  alt.name === selectedProgram
+                    ? 'border-brand-400/70 bg-brand-500/10'
+                    : 'border-white/5 bg-white/5'
+                }`}
               >
                 <span>{alt.name}</span>
-                <span className="font-semibold text-brand-200">{alt.score}</span>
+                <div className="flex items-center gap-3">
+                  <span className="font-semibold text-brand-200">{alt.score}</span>
+                  <button
+                    type="button"
+                    disabled={isProcessing || alt.name === selectedProgram}
+                    onClick={() => selectProgram(alt.name)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      alt.name === selectedProgram
+                        ? 'border border-brand-400 text-brand-200'
+                        : 'border border-white/20 text-white hover:border-brand-400 hover:text-brand-200'
+                    } disabled:opacity-60`}
+                  >
+                    {alt.name === selectedProgram ? 'Aktif' : 'Seç'}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
