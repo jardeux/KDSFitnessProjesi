@@ -7,6 +7,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "barbell",
     targetMuscles: ["pectorals", "triceps", "front delts"],
+    gifUrl: "/exercises/download.jpg",
   },
   {
     id: "ch-2",
@@ -15,6 +16,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "dumbbell",
     targetMuscles: ["pectorals", "triceps"],
+    gifUrl: "/exercises/download (1).jpg",
   },
   {
     id: "ch-3",
@@ -23,6 +25,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "barbell",
     targetMuscles: ["upper chest", "triceps"],
+    gifUrl: "/exercises/download (2).jpg",
   },
   {
     id: "ch-4",
@@ -31,6 +34,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "dumbbell",
     targetMuscles: ["upper chest"],
+    gifUrl: "/exercises/download (3).jpg",
   },
   {
     id: "ch-5",
@@ -39,6 +43,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "barbell",
     targetMuscles: ["lower chest"],
+    gifUrl: "/exercises/download (4).jpg",
   },
   {
     id: "ch-6",
@@ -47,6 +52,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "machine",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (5).jpg",
   },
   {
     id: "ch-7",
@@ -55,6 +61,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "cable",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (6).jpg",
   },
   {
     id: "ch-8",
@@ -63,6 +70,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "bodyweight",
     targetMuscles: ["pectorals", "triceps"],
+    gifUrl: "/exercises/download (7).jpg",
   },
   {
     id: "ch-9",
@@ -71,6 +79,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "bodyweight",
     targetMuscles: ["inner chest", "triceps"],
+    gifUrl: "/exercises/download (8).jpg",
   },
   {
     id: "ch-10",
@@ -79,6 +88,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "bodyweight",
     targetMuscles: ["upper chest"],
+    gifUrl: "/exercises/download (9).jpg",
   },
   {
     id: "ch-11",
@@ -87,6 +97,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "bodyweight",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (10).jpg",
   },
   {
     id: "ch-12",
@@ -95,6 +106,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "dip bar",
     targetMuscles: ["lower chest", "triceps"],
+    gifUrl: "/exercises/download (11).jpg",
   },
   {
     id: "ch-13",
@@ -103,6 +115,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "resistance band",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (12).jpg",
   },
   {
     id: "ch-14",
@@ -111,6 +124,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "resistance band",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (13).jpg",
   },
   {
     id: "ch-15",
@@ -119,6 +133,7 @@ export const mockExercises = [
     bodyPart: "chest",
     equipment: "cable",
     targetMuscles: ["pectorals"],
+    gifUrl: "/exercises/download (14).jpg",
   },
 
   // --- SIRT (BACK) ---
@@ -129,6 +144,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "barbell",
     targetMuscles: ["lower back", "lats", "traps"],
+    gifUrl: "/exercises/download (15).jpg",
   },
   {
     id: "bk-2",
@@ -137,6 +153,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "bodyweight",
     targetMuscles: ["lats", "biceps"],
+    gifUrl: "/exercises/download (16).jpg",
   },
   {
     id: "bk-3",
@@ -145,6 +162,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "machine",
     targetMuscles: ["lats"],
+    gifUrl: "/exercises/download (17).jpg",
   },
   {
     id: "bk-4",
@@ -153,6 +171,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "barbell",
     targetMuscles: ["lats", "rhomboids"],
+    gifUrl: "/exercises/download (18).jpg",
   },
   {
     id: "bk-5",
@@ -161,6 +180,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "dumbbell",
     targetMuscles: ["lats"],
+    gifUrl: "/exercises/download (19).jpg",
   },
   {
     id: "bk-6",
@@ -169,6 +189,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "cable",
     targetMuscles: ["middle back"],
+    gifUrl: "/exercises/download (20).jpg",
   },
   {
     id: "bk-7",
@@ -177,6 +198,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "machine",
     targetMuscles: ["middle back"],
+    gifUrl: "/exercises/download (21).jpg",
   },
   {
     id: "bk-8",
@@ -185,6 +207,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "bodyweight",
     targetMuscles: ["upper back", "lats"],
+    gifUrl: "/exercises/download (22).jpg",
   },
   {
     id: "bk-9",
@@ -193,6 +216,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "bodyweight",
     targetMuscles: ["lower back"],
+    gifUrl: "/exercises/download (23).jpg",
   },
   {
     id: "bk-10",
@@ -201,6 +225,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "machine",
     targetMuscles: ["lower back"],
+    gifUrl: "/exercises/download (24).jpg",
   },
   {
     id: "bk-11",
@@ -209,6 +234,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "bodyweight",
     targetMuscles: ["lats"],
+    gifUrl: "/exercises/download (25).jpg",
   },
   {
     id: "bk-12",
@@ -217,6 +243,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "machine",
     targetMuscles: ["lower lats"],
+    gifUrl: "/exercises/download (26).jpg",
   },
   {
     id: "bk-13",
@@ -225,6 +252,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "cable",
     targetMuscles: ["lats"],
+    gifUrl: "/exercises/download (27).jpg",
   },
   {
     id: "bk-14",
@@ -233,6 +261,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "resistance band",
     targetMuscles: ["middle back"],
+    gifUrl: "/exercises/download (28).jpg",
   },
   {
     id: "bk-15",
@@ -241,6 +270,7 @@ export const mockExercises = [
     bodyPart: "back",
     equipment: "bodyweight",
     targetMuscles: ["upper back", "rear delts"],
+    gifUrl: "/exercises/download (29).jpg",
   },
 
   // --- BACAK (LEGS) ---
@@ -251,6 +281,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "barbell",
     targetMuscles: ["quadriceps", "glutes", "hamstrings"],
+    gifUrl: "/exercises/download (30).jpg",
   },
   {
     id: "lg-2",
@@ -259,6 +290,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "machine",
     targetMuscles: ["quadriceps", "glutes"],
+    gifUrl: "/exercises/download (31).jpg",
   },
   {
     id: "lg-3",
@@ -267,6 +299,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "bodyweight",
     targetMuscles: ["quadriceps", "glutes"],
+    gifUrl: "/exercises/download (32).jpg",
   },
   {
     id: "lg-4",
@@ -275,6 +308,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "barbell",
     targetMuscles: ["hamstrings", "glutes"],
+    gifUrl: "/exercises/download (33).jpg",
   },
   {
     id: "lg-5",
@@ -283,6 +317,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "machine",
     targetMuscles: ["hamstrings"],
+    gifUrl: "/exercises/download (34).jpg",
   },
   {
     id: "lg-6",
@@ -291,6 +326,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "machine",
     targetMuscles: ["quadriceps"],
+    gifUrl: "/exercises/download (35).jpg",
   },
   {
     id: "lg-7",
@@ -299,6 +335,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "dumbbell",
     targetMuscles: ["quads", "glutes"],
+    gifUrl: "/exercises/download (36).jpg",
   },
   {
     id: "lg-8",
@@ -307,6 +344,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "bodyweight",
     targetMuscles: ["glutes", "hamstrings"],
+    gifUrl: "/exercises/download (37).jpg",
   },
   {
     id: "lg-9",
@@ -315,6 +353,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "barbell",
     targetMuscles: ["glutes"],
+    gifUrl: "/exercises/download (38).jpg",
   },
   {
     id: "lg-10",
@@ -323,6 +362,7 @@ export const mockExercises = [
     bodyPart: "lower legs",
     equipment: "bodyweight",
     targetMuscles: ["gastrocnemius", "soleus"],
+    gifUrl: "/exercises/download (39).jpg",
   },
   {
     id: "lg-11",
@@ -331,6 +371,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "bodyweight",
     targetMuscles: ["quadriceps", "glutes"],
+    gifUrl: "/exercises/download (40).jpg",
   },
   {
     id: "lg-12",
@@ -339,6 +380,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "barbell",
     targetMuscles: ["glutes", "inner thighs", "hamstrings"],
+    gifUrl: "/exercises/download (41).jpg",
   },
   {
     id: "lg-13",
@@ -347,6 +389,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "dumbbell",
     targetMuscles: ["quadriceps", "glutes"],
+    gifUrl: "/exercises/download (42).jpg",
   },
   {
     id: "lg-14",
@@ -355,6 +398,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "bodyweight",
     targetMuscles: ["quadriceps"],
+    gifUrl: "/exercises/download (43).jpg",
   },
   {
     id: "lg-15",
@@ -363,6 +407,7 @@ export const mockExercises = [
     bodyPart: "upper legs",
     equipment: "bodyweight",
     targetMuscles: ["adductors", "quads"],
+    gifUrl: "/exercises/download (44).jpg",
   },
 
   // --- OMUZ (SHOULDERS) ---
@@ -373,6 +418,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "barbell",
     targetMuscles: ["front delts", "side delts", "triceps"],
+    gifUrl: "/exercises/download (45).jpg",
   },
   {
     id: "sh-2",
@@ -381,6 +427,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "dumbbell",
     targetMuscles: ["deltoids"],
+    gifUrl: "/exercises/download (46).jpg",
   },
   {
     id: "sh-3",
@@ -389,6 +436,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "dumbbell",
     targetMuscles: ["lateral deltoid"],
+    gifUrl: "/exercises/download (47).jpg",
   },
   {
     id: "sh-4",
@@ -397,6 +445,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "dumbbell",
     targetMuscles: ["front deltoid"],
+    gifUrl: "/exercises/download (48).jpg",
   },
   {
     id: "sh-5",
@@ -405,6 +454,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "dumbbell",
     targetMuscles: ["rear delts"],
+    gifUrl: "/exercises/download (49).jpg",
   },
   {
     id: "sh-6",
@@ -413,6 +463,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "dumbbell",
     targetMuscles: ["deltoids"],
+    gifUrl: "/exercises/download (50).jpg",
   },
   {
     id: "sh-7",
@@ -421,6 +472,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "cable",
     targetMuscles: ["side delts"],
+    gifUrl: "/exercises/download (51).jpg",
   },
   {
     id: "sh-8",
@@ -429,6 +481,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "machine",
     targetMuscles: ["deltoids"],
+    gifUrl: "/exercises/download (52).jpg",
   },
   {
     id: "sh-9",
@@ -437,6 +490,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "bodyweight",
     targetMuscles: ["front delts", "triceps"],
+    gifUrl: "/exercises/download (53).jpg",
   },
   {
     id: "sh-10",
@@ -445,6 +499,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "bodyweight",
     targetMuscles: ["front delts"],
+    gifUrl: "/exercises/download (54).jpg",
   },
   {
     id: "sh-11",
@@ -453,6 +508,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "barbell",
     targetMuscles: ["side delts", "traps"],
+    gifUrl: "/exercises/download (55).jpg",
   },
   {
     id: "sh-12",
@@ -461,6 +517,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "cable",
     targetMuscles: ["rear delts", "upper back"],
+    gifUrl: "/exercises/download (56).jpg",
   },
   {
     id: "sh-13",
@@ -469,6 +526,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "kettlebell",
     targetMuscles: ["deltoids"],
+    gifUrl: "/exercises/download (57).jpg",
   },
   {
     id: "sh-14",
@@ -477,6 +535,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "cable",
     targetMuscles: ["front delts"],
+    gifUrl: "/exercises/download (58).jpg",
   },
   {
     id: "sh-15",
@@ -485,6 +544,7 @@ export const mockExercises = [
     bodyPart: "shoulders",
     equipment: "resistance band",
     targetMuscles: ["deltoids"],
+    gifUrl: "/exercises/download (59).jpg",
   },
 
   // --- KOL (ARMS) ---
@@ -495,6 +555,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "barbell",
     targetMuscles: ["biceps"],
+    gifUrl: "/exercises/download (60).jpg",
   },
   {
     id: "ar-2",
@@ -503,6 +564,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "dumbbell",
     targetMuscles: ["biceps"],
+    gifUrl: "/exercises/download (61).jpg",
   },
   {
     id: "ar-3",
@@ -511,6 +573,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "dumbbell",
     targetMuscles: ["brachialis", "biceps"],
+    gifUrl: "/exercises/download (62).jpg",
   },
   {
     id: "ar-4",
@@ -519,6 +582,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "machine",
     targetMuscles: ["biceps"],
+    gifUrl: "/exercises/download (63).jpg",
   },
   {
     id: "ar-5",
@@ -527,6 +591,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "cable",
     targetMuscles: ["biceps"],
+    gifUrl: "/exercises/download (64).jpg",
   },
   {
     id: "ar-6",
@@ -535,6 +600,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "cable",
     targetMuscles: ["triceps"],
+    gifUrl: "/exercises/download (65).jpg",
   },
   {
     id: "ar-7",
@@ -543,6 +609,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "barbell",
     targetMuscles: ["triceps"],
+    gifUrl: "/exercises/download (66).jpg",
   },
   {
     id: "ar-8",
@@ -551,6 +618,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "dip bar",
     targetMuscles: ["triceps"],
+    gifUrl: "/exercises/download (67).jpg",
   },
   {
     id: "ar-9",
@@ -559,6 +627,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "dumbbell",
     targetMuscles: ["long head triceps"],
+    gifUrl: "/exercises/download (68).jpg",
   },
   {
     id: "ar-10",
@@ -567,6 +636,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "barbell",
     targetMuscles: ["triceps"],
+    gifUrl: "/exercises/download (69).jpg",
   },
   {
     id: "ar-11",
@@ -575,6 +645,7 @@ export const mockExercises = [
     bodyPart: "lower arms",
     equipment: "barbell",
     targetMuscles: ["forearms"],
+    gifUrl: "/exercises/download (70).jpg",
   },
   {
     id: "ar-12",
@@ -583,6 +654,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "barbell",
     targetMuscles: ["brachioradialis"],
+    gifUrl: "/exercises/download (71).jpg",
   },
   {
     id: "ar-13",
@@ -591,6 +663,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "resistance band",
     targetMuscles: ["biceps"],
+    gifUrl: "/exercises/download (72).jpg",
   },
   {
     id: "ar-14",
@@ -599,6 +672,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "bodyweight",
     targetMuscles: ["triceps"],
+    gifUrl: "/exercises/download (73).jpg",
   },
   {
     id: "ar-15",
@@ -607,6 +681,7 @@ export const mockExercises = [
     bodyPart: "upper arms",
     equipment: "bodyweight",
     targetMuscles: ["biceps", "lats"],
+    gifUrl: "/exercises/download (74).jpg",
   },
 
   // --- ABS & CORE ---
@@ -617,6 +692,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["rectus abdominis"],
+    gifUrl: "/exercises/download (75).jpg",
   },
   {
     id: "cr-2",
@@ -625,6 +701,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["lower abs"],
+    gifUrl: "/exercises/download (76).jpg",
   },
   {
     id: "cr-3",
@@ -633,6 +710,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["core", "transverse abdominis"],
+    gifUrl: "/exercises/download (77).jpg",
   },
   {
     id: "cr-4",
@@ -641,6 +719,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bar",
     targetMuscles: ["lower abs"],
+    gifUrl: "/exercises/download (78).jpg",
   },
   {
     id: "cr-5",
@@ -649,6 +728,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "cable",
     targetMuscles: ["upper abs"],
+    gifUrl: "/exercises/download (79).jpg",
   },
   {
     id: "cr-6",
@@ -657,6 +737,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["obliques"],
+    gifUrl: "/exercises/download (80).jpg",
   },
   {
     id: "cr-7",
@@ -665,6 +746,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["lower abs", "hip flexors"],
+    gifUrl: "/exercises/download (81).jpg",
   },
   {
     id: "cr-8",
@@ -673,6 +755,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["obliques", "upper abs"],
+    gifUrl: "/exercises/download (82).jpg",
   },
   {
     id: "cr-9",
@@ -681,6 +764,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["abs"],
+    gifUrl: "/exercises/download (83).jpg",
   },
   {
     id: "cr-10",
@@ -689,6 +773,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["obliques"],
+    gifUrl: "/exercises/download (84).jpg",
   },
   {
     id: "cr-11",
@@ -697,6 +782,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["lower abs"],
+    gifUrl: "/exercises/download (85).jpg",
   },
   {
     id: "cr-12",
@@ -705,6 +791,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["upper abs"],
+    gifUrl: "/exercises/download (86).jpg",
   },
   {
     id: "cr-13",
@@ -713,6 +800,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "ab wheel",
     targetMuscles: ["rectus abdominis", "transverse abdominis"],
+    gifUrl: "/exercises/download (87).jpg",
   },
   {
     id: "cr-14",
@@ -721,6 +809,7 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["upper abs"],
+    gifUrl: "/exercises/download (88).jpg",
   },
   {
     id: "cr-15",
@@ -729,5 +818,6 @@ export const mockExercises = [
     bodyPart: "waist",
     equipment: "bodyweight",
     targetMuscles: ["core"],
+    gifUrl: "/exercises/images.jpg",
   },
 ];

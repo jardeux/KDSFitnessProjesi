@@ -57,7 +57,7 @@ const normalizeExercise = (exercise = {}) => {
     secondaryMuscles: Array.isArray(exercise.secondaryMuscles)
       ? exercise.secondaryMuscles
       : [],
-    // gifUrl kullanılmıyor
+    gifUrl: exercise.gifUrl || '',
   };
 };
 

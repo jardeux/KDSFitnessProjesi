@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import UserProfileForm from "./components/forms/UserProfileForm";
 import DecisionResults from "./components/dashboard/DecisionResults";
 import WeeklyPlan from "./components/dashboard/WeeklyPlan";
@@ -21,6 +21,8 @@ function App() {
   const [planExplanation, setPlanExplanation] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState(null);
+  const [selectedExerciseFromPlan, setSelectedExerciseFromPlan] = useState(null);
+  const atlasRef = useRef(null);
 
   const handleProfileChange = (updates) =>
     setProfile((prev) => ({ ...prev, ...updates }));
@@ -44,6 +46,13 @@ function App() {
       setPlanExplanation("");
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleExerciseClick = (exercise) => {
+    setSelectedExerciseFromPlan(exercise);
+    if (atlasRef.current) {
+      atlasRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -74,7 +83,13 @@ function App() {
             errors={errors}
           />
           <div className="flex flex-col gap-6">
-            <RegionalExerciseSelector workoutPlan={workoutPlan} />
+            <div ref={atlasRef}>
+              <RegionalExerciseSelector 
+                workoutPlan={workoutPlan} 
+                selectedExercise={selectedExerciseFromPlan}
+                onExerciseProcessed={() => setSelectedExerciseFromPlan(null)}
+              />
+            </div>
             <DecisionResults
               workoutPlan={workoutPlan}
               isProcessing={isProcessing}
@@ -84,6 +99,7 @@ function App() {
               workoutPlan={workoutPlan}
               planExplanation={planExplanation}
               isProcessing={isProcessing}
+              onExerciseClick={handleExerciseClick}
             />
           </div>
         </main>

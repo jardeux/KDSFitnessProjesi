@@ -2,6 +2,7 @@ export default function WeeklyPlan({
   workoutPlan,
   planExplanation,
   isProcessing,
+  onExerciseClick,
 }) {
   if (isProcessing) {
     return (
@@ -83,7 +84,8 @@ export default function WeeklyPlan({
                 {session.exercises.map((exercise, index) => (
                   <li
                     key={exercise.id}
-                    className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-white transition hover:bg-white/10 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-white transition hover:bg-white/10 cursor-pointer sm:flex-row sm:items-center sm:justify-between"
+                    onClick={() => onExerciseClick?.(exercise)}
                   >
                     <div className="flex items-center gap-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-bold text-slate-400">

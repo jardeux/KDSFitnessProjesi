@@ -163,11 +163,13 @@ const buildPlanLookup = (workoutPlan = []) => {
         key = "core";
 
       const list = lookup.get(key) || [];
+      console.log(`Adding exercise: ${exercise.name}, gifUrl: ${exercise.gifUrl}`); // Debug
       list.push({
         name: exercise.name,
         sets: exercise.sets,
         reps: exercise.reps,
         day: day.day,
+        gifUrl: exercise.gifUrl,
       });
       lookup.set(key, list);
     });
@@ -337,7 +339,17 @@ function BodyMap({ selectedRegion, onSelectRegion }) {
   );
 }
 
-function ExercisePreview({ regionId, exercises }) {
+function ExercisePreview({ regionId, exercises, highlightedExercise }) {
+  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [imageModal, setImageModal] = useState(null);
+
+  // Auto-open highlighted exercise
+  useEffect(() => {
+    if (highlightedExercise) {
+      setSelectedExercise(exercises.find(ex => ex.name === highlightedExercise));
+    }
+  }, [highlightedExercise, exercises]);
+
   if (!exercises.length) {
     return (
       <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 text-center text-sm text-slate-300">
@@ -347,42 +359,174 @@ function ExercisePreview({ regionId, exercises }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-        <p className="mb-4 text-xs uppercase tracking-[0.3em] text-brand-400">
-          Programdaki {getRegionById(regionId).label} Hareketleri
-        </p>
+    <>
+      <div className="flex flex-col gap-4">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-brand-400">
+            Programdaki {getRegionById(regionId).label} Hareketleri
+          </p>
 
-        <ul className="space-y-3">
-          {exercises.map((exercise, idx) => (
-            <li
-              key={idx}
-              className="flex items-center justify-between rounded-lg bg-white/5 p-3"
-            >
-              <div>
-                <p className="font-medium text-white">{exercise.name}</p>
-                <p className="text-xs text-slate-400">{exercise.day}</p>
-              </div>
-              <div className="text-right text-xs">
-                <span className="block text-brand-200">
-                  {exercise.sets} Set
-                </span>
-                <span className="text-slate-500">{exercise.reps}</span>
-              </div>
+          <ul className="space-y-3">
+            {exercises.map((exercise, idx) => {
+              console.log("Exercise data:", exercise); // Debug
+              const isHighlighted = exercise.name === highlightedExercise;
+              return (
+              <li key={idx} className="space-y-2">
+                <div
+                  className={`flex cursor-pointer items-center justify-between rounded-lg p-3 transition ${
+                    isHighlighted
+                      ? 'bg-gradient-to-r from-brand-500/40 via-purple-500/40 to-brand-500/40 border-2 border-brand-400 animate-[pulse_0.8s_ease-in-out_infinite] shadow-lg shadow-brand-500/50'
+                      : 'bg-white/5 border border-transparent hover:bg-white/10'
+                  }`}
+                  onClick={() =>
+                    setSelectedExercise(
+                      selectedExercise?.name === exercise.name ? null : exercise
+                    )
+                  }
+                >
+                  <div>
+                    <p className="font-medium text-white">{exercise.name}</p>
+                    <p className="text-xs text-slate-400">{exercise.day}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right text-xs">
+                      <span className="block text-brand-200">
+                        {exercise.sets} Set
+                      </span>
+                      <span className="text-slate-500">{exercise.reps}</span>
+                    </div>
+                    <svg
+                      className={`h-5 w-5 text-slate-400 transition-transform ${
+                        selectedExercise?.name === exercise.name
+                          ? "rotate-180"
+                          : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {selectedExercise?.name === exercise.name && (
+                  <div className="rounded-lg border border-slate-700 bg-slate-950 p-3">
+                    {exercise.gifUrl ? (
+                      <>
+                        <img
+                          src={exercise.gifUrl}
+                          alt={exercise.name}
+                          className="h-auto w-full cursor-zoom-in rounded-md object-cover transition hover:opacity-90"
+                          onClick={() => setImageModal({ url: exercise.gifUrl, name: exercise.name })}
+                          onError={(e) => {
+                            console.error("Image failed to load:", exercise.gifUrl);
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "block";
+                          }}
+                          onLoad={() => {
+                            console.log("Image loaded successfully:", exercise.gifUrl);
+                          }}
+                        />
+                        <p className="hidden text-center text-sm text-slate-400">
+                          Görsel yüklenemedi: {exercise.gifUrl}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-center text-sm text-slate-400">
+                        Bu hareket için görsel bulunamadı
+                      </p>
+                    )}
+                  </div>
+                )}
             </li>
-          ))}
+            );
+          })}
         </ul>
       </div>
     </div>
+
+    {/* Image Modal */}
+    {imageModal && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+        onClick={() => setImageModal(null)}
+      >
+        <div className="relative max-h-[90vh] max-w-4xl">
+          <button
+            onClick={() => setImageModal(null)}
+            className="absolute -right-4 -top-4 rounded-full bg-white p-2 text-slate-900 shadow-lg transition hover:bg-slate-200"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <img
+            src={imageModal.url}
+            alt={imageModal.name}
+            className="max-h-[90vh] w-auto rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <p className="mt-3 text-center text-sm text-white">
+            {imageModal.name}
+          </p>
+        </div>
+      </div>
+    )}
+  </>
   );
 }
 
-export default function RegionalExerciseSelector({ workoutPlan = [] }) {
+export default function RegionalExerciseSelector({ workoutPlan = [], selectedExercise, onExerciseProcessed }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(REGION_DATA[0].id);
   const [hasAutoOpened, setHasAutoOpened] = useState(false);
+  const [highlightedExercise, setHighlightedExercise] = useState(null);
 
   const planLookup = useMemo(() => buildPlanLookup(workoutPlan), [workoutPlan]);
+
+  // Handle exercise selection from WeeklyPlan
+  useEffect(() => {
+    if (selectedExercise) {
+      const target = selectedExercise.target?.toLowerCase() || '';
+      let regionKey = null;
+
+      // Map target to region
+      if (target.includes('pectoral') || target.includes('chest')) regionKey = 'chest';
+      else if (target.includes('lat') || target.includes('back')) regionKey = 'back';
+      else if (target.includes('leg') || target.includes('quad') || target.includes('hamstring') || target.includes('calf')) regionKey = 'legs';
+      else if (target.includes('bicep') || target.includes('tricep') || target.includes('arm')) regionKey = 'arms';
+      else if (target.includes('delt') || target.includes('shoulder')) regionKey = 'shoulders';
+      else if (target.includes('abs') || target.includes('waist') || target.includes('core')) regionKey = 'core';
+      else if (target.includes('glute')) regionKey = 'glutes';
+
+      if (regionKey) {
+        setSelectedRegion(regionKey);
+        setIsOpen(true);
+        setHighlightedExercise(selectedExercise.name);
+        
+        // Auto-scroll to highlighted exercise after a brief delay
+        setTimeout(() => {
+          setHighlightedExercise(null);
+          onExerciseProcessed?.();
+        }, 5000);
+      }
+    }
+  }, [selectedExercise, onExerciseProcessed]);
 
   useEffect(() => {
     if (workoutPlan.length) {
@@ -447,6 +591,7 @@ export default function RegionalExerciseSelector({ workoutPlan = [] }) {
           <ExercisePreview
             regionId={selectedRegion}
             exercises={exercisesForRegion}
+            highlightedExercise={highlightedExercise}
           />
         </div>
       )}
