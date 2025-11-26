@@ -9,7 +9,7 @@ export default function WeeklyPlan() {
         <p className="text-sm uppercase tracking-widest text-brand-400">Haftalık Plan</p>
         <p className="mt-2 font-display text-2xl text-white">Program hesaplanıyor...</p>
         <p className="mt-3 text-sm text-slate-400">
-          ExerciseDB verileri yükleniyor ve günlere dağıtılıyor.
+          Egzersiz verileri günlere dağıtılıyor.
         </p>
       </section>
     );
@@ -43,7 +43,7 @@ export default function WeeklyPlan() {
             key={session.day}
             className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 shadow-inner"
           >
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-4 border-b border-white/5 pb-3">
               <div>
                 <p className="text-xs uppercase tracking-wide text-slate-500">{session.day}</p>
                 <h4 className="text-xl font-semibold text-white">{session.focus}</h4>
@@ -53,59 +53,36 @@ export default function WeeklyPlan() {
               </span>
             </div>
 
-            <ul className="mt-4 space-y-3">
-              {session.exercises.map((exercise) => (
+            <ul className="space-y-2">
+              {session.exercises.map((exercise, index) => (
                 <li
                   key={exercise.id}
-                  className="rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-white"
+                  className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm text-white transition hover:bg-white/10 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="flex flex-col gap-4 md:flex-row">
-                    {exercise.gifUrl ? (
-                      <img
-                        src={exercise.gifUrl}
-                        alt={exercise.name}
-                        loading="lazy"
-                        className="h-24 w-24 rounded-xl object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-24 w-24 items-center justify-center rounded-xl bg-slate-800 text-[10px] text-slate-400">
-                        GIF bulunamadı
-                      </div>
-                    )}
-
-                    <div className="flex-1 space-y-2">
-                      <div>
-                        <p className="text-base font-semibold">{exercise.name}</p>
-                        <p className="text-xs text-slate-300">
-                          Hedef: {exercise.target} • Ekipman: {exercise.equipment}
-                        </p>
-                        {exercise.secondaryMuscles?.length ? (
-                          <p className="mt-1 text-xs text-slate-400">
-                            Yardımcı: {exercise.secondaryMuscles.join(', ')}
-                          </p>
-                        ) : null}
-                      </div>
-
-                      <div className="flex flex-wrap gap-3 text-xs text-slate-100">
-                        <span className="rounded-full bg-brand-500/20 px-2 py-1">
-                          Set: {exercise.sets}
-                        </span>
-                        <span className="rounded-full bg-brand-500/20 px-2 py-1">
-                          Tekrar/Süre: {exercise.reps}
-                        </span>
-                        {exercise.tempo ? (
-                          <span className="rounded-full bg-white/10 px-2 py-1">
-                            Tempo: {exercise.tempo}
-                          </span>
-                        ) : null}
-                      </div>
-
-                      {exercise.notes ? (
-                        <p className="text-xs text-slate-300">
-                          {exercise.notes}
-                        </p>
-                      ) : null}
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xs font-bold text-slate-400">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <p className="text-base font-semibold text-slate-100">{exercise.name}</p>
+                      <p className="text-xs text-slate-400">
+                        Hedef: {exercise.target} {exercise.secondaryMuscles?.length > 0 && `• Yardımcı: ${exercise.secondaryMuscles.join(', ')}`}
+                      </p>
                     </div>
+                  </div>
+
+                  <div className="flex shrink-0 flex-wrap items-center gap-2 pl-9 sm:pl-0">
+                    <span className="rounded bg-brand-500/20 px-2 py-1 text-xs font-medium text-brand-100">
+                      {exercise.sets} Set
+                    </span>
+                    <span className="rounded bg-slate-700/50 px-2 py-1 text-xs text-slate-300">
+                      {exercise.reps}
+                    </span>
+                    {exercise.tempo && (
+                      <span className="hidden rounded bg-slate-800 px-2 py-1 text-xs text-slate-500 sm:inline-block">
+                        Tempo: {exercise.tempo}
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}
@@ -116,4 +93,3 @@ export default function WeeklyPlan() {
     </section>
   );
 }
-

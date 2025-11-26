@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { HYPERTROPHY_LIBRARY } from '../../data/hypertrophyLibrary';
 import { useFitnessStore } from '../../state/useFitnessStore';
+// HYPERTROPHY_LIBRARY importuna artık gerek kalmadı, store'dan gelen veri yeterli
 
 const REGION_DATA = [
   {
@@ -91,15 +91,25 @@ const buildPlanLookup = (workoutPlan = []) => {
 
   workoutPlan.forEach((day) => {
     day.exercises?.forEach((exercise) => {
-      const key = exercise.target?.toLowerCase();
+      // Hareketin hedef bölgesini bul
+      let key = exercise.target?.toLowerCase();
+      
+      // Basit eşleştirme (target içinde region id geçiyor mu?)
       if (!key) return;
+      
+      // Mapping düzeltmeleri
+      if (key.includes('pectoral') || key.includes('chest')) key = 'chest';
+      else if (key.includes('lat') || key.includes('back')) key = 'back';
+      else if (key.includes('leg') || key.includes('quad') || key.includes('hamstring') || key.includes('calf')) key = 'legs';
+      else if (key.includes('bicep') || key.includes('tricep') || key.includes('arm')) key = 'arms';
+      else if (key.includes('delt') || key.includes('shoulder')) key = 'shoulders';
+      else if (key.includes('abs') || key.includes('waist') || key.includes('core')) key = 'core';
+      
       const list = lookup.get(key) || [];
       list.push({
         name: exercise.name,
-        gifUrl: exercise.gifUrl,
         sets: exercise.sets,
         reps: exercise.reps,
-        notes: exercise.notes,
         day: day.day,
       });
       lookup.set(key, list);
@@ -182,75 +192,35 @@ function BodyMap({ selectedRegion, onSelectRegion }) {
   );
 }
 
-function ExercisePreview({ regionId, exercises, source, exerciseIndex, onNextExercise }) {
+function ExercisePreview({ regionId, exercises }) {
   if (!exercises.length) {
     return (
       <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 text-center text-sm text-slate-300">
-        Bu bölge için kayıtlı hareket bulunamadı.
+        Bu bölge için programda kayıtlı hareket bulunamadı.
       </div>
     );
   }
 
-  const activeExercise = exercises[exerciseIndex % exercises.length];
-  const metaChips = [
-    activeExercise.day ? `Gün: ${activeExercise.day}` : null,
-    activeExercise.sets && activeExercise.reps ? `${activeExercise.sets} set × ${activeExercise.reps}` : null,
-  ].filter(Boolean);
-
-  const otherExercises = exercises.filter((exercise) => exercise.name !== activeExercise.name);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-brand-400">
-              {source === 'plan' ? 'AHP programı çıkışı' : 'Kütüphane önerisi'}
-            </p>
-            <h3 className="text-xl font-semibold text-white">{activeExercise.name}</h3>
-            {metaChips.length ? (
-              <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-400">
-                {metaChips.map((chip) => (
-                  <span key={chip} className="rounded-full border border-white/10 px-2 py-0.5">
-                    {chip}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-          </div>
-          <button
-            type="button"
-            className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-brand-200 transition hover:border-brand-400 hover:text-white"
-            onClick={onNextExercise}
-          >
-            Sonraki
-          </button>
-        </div>
-
-        <div className="mt-4 overflow-hidden rounded-lg bg-black/60">
-          <img
-            src={activeExercise.gifUrl}
-            alt={activeExercise.name}
-            className="h-64 w-full object-cover"
-            loading="lazy"
-          />
-        </div>
-
-        {activeExercise.notes ? (
-          <p className="mt-3 text-sm text-slate-300">{activeExercise.notes}</p>
-        ) : null}
-      </div>
-
-      <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Bölgedeki diğer hareketler</p>
-        <ul className="mt-3 space-y-2 text-sm text-slate-300">
-          {otherExercises.length ? (
-            otherExercises.map((exercise) => (
-              <li key={`${regionId}-${exercise.name}`}>{exercise.name}</li>
-            ))
-          ) : (
-            <li className="text-slate-500">Araştırılacak başka hareket yok.</li>
-          )}
+        <p className="mb-4 text-xs uppercase tracking-[0.3em] text-brand-400">
+          Programdaki {getRegionById(regionId).label} Hareketleri
+        </p>
+        
+        <ul className="space-y-3">
+          {exercises.map((exercise, idx) => (
+             <li key={idx} className="flex items-center justify-between rounded-lg bg-white/5 p-3">
+                <div>
+                   <p className="font-medium text-white">{exercise.name}</p>
+                   <p className="text-xs text-slate-400">{exercise.day}</p>
+                </div>
+                <div className="text-right text-xs">
+                   <span className="block text-brand-200">{exercise.sets} Set</span>
+                   <span className="text-slate-500">{exercise.reps}</span>
+                </div>
+             </li>
+          ))}
         </ul>
       </div>
     </div>
@@ -261,33 +231,9 @@ export default function RegionalExerciseSelector() {
   const { recommendation, programMeta, workoutPlan } = useFitnessStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(REGION_DATA[0].id);
-  const [exerciseIndex, setExerciseIndex] = useState(0);
   const [hasAutoOpened, setHasAutoOpened] = useState(false);
 
   const planLookup = useMemo(() => buildPlanLookup(workoutPlan), [workoutPlan]);
-
-  const recommendedTargets = useMemo(() => {
-    if (programMeta?.hypertrophyTargets?.length) {
-      return programMeta.hypertrophyTargets;
-    }
-    return DEFAULT_SEQUENCE;
-  }, [programMeta?.hypertrophyTargets]);
-
-  const selectableRegions = useMemo(() => {
-    const canonical = REGION_DATA.map((region) => region.id);
-    const ordered = [...recommendedTargets, ...canonical];
-    return ordered.filter((id, index) => ordered.indexOf(id) === index && canonical.includes(id));
-  }, [recommendedTargets]);
-
-  const exercisesForRegion = useMemo(() => {
-    const regionKey = (selectedRegion || '').toLowerCase();
-    const planMatches = planLookup.get(regionKey) || [];
-    if (planMatches.length) {
-      return { source: 'plan', items: planMatches };
-    }
-    const fallback = HYPERTROPHY_LIBRARY[regionKey] || [];
-    return { source: 'library', items: fallback };
-  }, [planLookup, selectedRegion]);
 
   useEffect(() => {
     if (recommendation) {
@@ -301,29 +247,18 @@ export default function RegionalExerciseSelector() {
     }
   }, [recommendation, hasAutoOpened]);
 
-  useEffect(() => {
-    if (!recommendedTargets.length) return;
-    const priority = recommendedTargets.find((target) => selectableRegions.includes(target));
-    if (priority) {
-      setSelectedRegion((current) => (current === priority ? current : priority));
-      setExerciseIndex(0);
-    }
-  }, [recommendedTargets, selectableRegions]);
-
-  useEffect(() => {
-    setExerciseIndex(0);
-  }, [selectedRegion, exercisesForRegion.source, exercisesForRegion.items.length]);
+  const exercisesForRegion = planLookup.get(selectedRegion) || [];
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-black/40">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-brand-400">Kas atlası</p>
-          <h2 className="text-2xl font-semibold text-white">AHP programına göre bölgesel hedef</h2>
+          <h2 className="text-2xl font-semibold text-white">Program Analizi</h2>
           <p className="text-sm text-slate-300">
             {recommendation
-              ? `${recommendation.name} programı ${programMeta?.hypertrophyTargets?.length || 0} kas grubunu önceliklendiriyor. Seç ve gifleri incele.`
-              : 'Formu çalıştırdığında AHP sonucuna göre öncelikli kas grupları burada vurgulanacak.'}
+              ? `Vücut haritasından bir bölge seçerek programındaki ilgili hareketleri incele.`
+              : 'Formu çalıştırdığında program analizi burada görünecek.'}
           </p>
         </div>
         <button
@@ -331,21 +266,21 @@ export default function RegionalExerciseSelector() {
           onClick={() => setIsOpen((prev) => !prev)}
           className="self-start rounded-full border border-brand-400 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-brand-100 transition hover:bg-brand-400/10"
         >
-          {isOpen ? 'Paneli gizle' : 'Bölgesel'}
+          {isOpen ? 'Gizle' : 'Atlası Aç'}
         </button>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {selectableRegions.map((regionId) => (
+        {REGION_DATA.map((region) => (
           <button
-            key={regionId}
+            key={region.id}
             type="button"
-            onClick={() => setSelectedRegion(regionId)}
+            onClick={() => setSelectedRegion(region.id)}
             className={`${pillClasses} ${
-              regionId === selectedRegion ? 'border-brand-400 text-brand-200' : 'text-slate-300'
-            } ${recommendedTargets[0] === regionId ? 'bg-brand-500/10 text-brand-100' : ''}`}
+              region.id === selectedRegion ? 'border-brand-400 text-brand-200' : 'text-slate-300'
+            }`}
           >
-            {getRegionById(regionId).label}
+            {region.label}
           </button>
         ))}
       </div>
@@ -355,15 +290,7 @@ export default function RegionalExerciseSelector() {
           <BodyMap selectedRegion={selectedRegion} onSelectRegion={setSelectedRegion} />
           <ExercisePreview
             regionId={selectedRegion}
-            exercises={exercisesForRegion.items}
-            source={exercisesForRegion.source}
-            exerciseIndex={exerciseIndex}
-            onNextExercise={() =>
-              setExerciseIndex((prev) => {
-                const length = exercisesForRegion.items.length || 1;
-                return (prev + 1) % length;
-              })
-            }
+            exercises={exercisesForRegion}
           />
         </div>
       )}

@@ -6,12 +6,6 @@ const experienceLevels = [
   { value: 'advanced', label: 'İleri Seviye' },
 ];
 
-const splitOptions = [
-  { value: 'ppl', label: 'PPL (Push/Pull/Legs)' },
-  { value: 'upperLower', label: 'Upper / Lower' },
-  { value: 'fullBody', label: 'Full Body' },
-];
-
 const numberFields = [
   { name: 'age', label: 'Yaş', placeholder: '28', min: 14, max: 80 },
   { name: 'weight', label: 'Kilo (kg)', placeholder: '72', min: 30, max: 200 },
@@ -22,8 +16,8 @@ export default function UserProfileForm() {
   const {
     profile,
     setProfile,
-    criteriaRatings,
-    setCriteriaRating,
+    selectedGoal,
+    setPrimaryGoal,
     runDecisionEngine,
     errors,
     isProcessing,
@@ -48,7 +42,7 @@ export default function UserProfileForm() {
         <p className="text-sm uppercase tracking-wide text-brand-400">Başlangıç</p>
         <h2 className="mt-1 font-display text-3xl text-white">Vücudunu ve hedeflerini tanımla</h2>
         <p className="mt-2 text-sm text-slate-300">
-          Girdiğin veriler Karar Motoru&apos;na (AHP + Regresyon) aktarılır ve 12 haftalık planın
+          Girdiğin veriler Karar Motoru'na (AHP + Regresyon) aktarılır ve 12 haftalık planın
           kişiselleştirilir.
         </p>
       </header>
@@ -93,8 +87,8 @@ export default function UserProfileForm() {
           <div className="rounded-2xl border border-white/10 bg-slate-800/70 p-4">
             <input
               type="range"
-              min={1}
-              max={7}
+              min={2}
+              max={6}
               step={1}
               name="availability"
               value={profile.availability}
@@ -104,17 +98,20 @@ export default function UserProfileForm() {
             <div className="mt-2 text-xl font-semibold text-brand-300">
               {profile.availability} gün
             </div>
+            <p className="text-xs text-slate-500 mt-1">
+              2 Gün: Full Body • 3 Gün: PPL • 4 Gün: Bölgesel • 5 Gün: Hibrit • 6 Gün: PPLx2
+            </p>
           </div>
         </label>
       </section>
 
       <section>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm uppercase tracking-wide text-brand-400">Önceliklendirme</p>
-            <h3 className="font-display text-2xl text-white">Senin için en kritik kriter ne?</h3>
+            <h3 className="font-display text-2xl text-white">Ana hedefin nedir?</h3>
             <p className="text-sm text-slate-300">
-              1-9 AHP ölçeğini kullan. Yüksek değerler kriterin daha önemli olduğunu ifade eder.
+              Seçimine göre Karar Motoru (AHP) ağırlıkları otomatik hesaplayacaktır.
             </p>
           </div>
           <span className="rounded-full bg-brand-500/20 px-4 py-1 text-xs font-semibold text-brand-200">
@@ -122,36 +119,23 @@ export default function UserProfileForm() {
           </span>
         </div>
 
-        <div className="mt-4 space-y-4">
-          {CRITERIA.map((criterion) => (
-            <div
-              key={criterion}
-              className="rounded-2xl border border-white/10 bg-slate-800/70 p-4 shadow-inner"
+        <div className="rounded-2xl border border-white/10 bg-slate-800/70 p-4 shadow-inner">
+          <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+            Hedef Seçimi
+            <select
+              value={selectedGoal}
+              onChange={(e) => setPrimaryGoal(e.target.value)}
+              className="w-full rounded-xl border border-white/10 bg-slate-900 p-4 text-lg text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-500/40"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-400">Kriter</p>
-                  <p className="text-lg font-semibold text-white">{criterion}</p>
-                </div>
-                <div className="text-3xl font-bold text-brand-300">
-                  {criteriaRatings[criterion]}
-                </div>
-              </div>
-              <input
-                type="range"
-                min={1}
-                max={9}
-                step={1}
-                value={criteriaRatings[criterion]}
-                onChange={(event) => setCriteriaRating(criterion, Number(event.target.value))}
-                className="mt-4 w-full accent-brand-500"
-              />
-              <div className="mt-2 flex justify-between text-xs text-slate-400">
-                <span>Eşit ağırlık</span>
-                <span>En yüksek öncelik</span>
-              </div>
-            </div>
-          ))}
+              {CRITERIA.map((criterion) => (
+                <option key={criterion} value={criterion}>
+                  {criterion}
+                </option>
+              ))}
+            </select>
+          </label>
+          
+          {/* ALT KISIMDAKİ PUAN GÖSTERGESİ BURADAYDI, ŞİMDİ SİLİNDİ */}
         </div>
       </section>
 
@@ -171,6 +155,3 @@ export default function UserProfileForm() {
     </form>
   );
 }
-
-
-
