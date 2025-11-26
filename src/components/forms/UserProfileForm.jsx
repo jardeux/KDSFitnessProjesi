@@ -1,36 +1,32 @@
-import { CRITERIA, useFitnessStore } from '../../state/useFitnessStore';
+const CRITERIA = ["Kas Kazanımı", "Yağ Kaybı", "Dayanıklılık"];
 
 const experienceLevels = [
-  { value: 'beginner', label: 'Başlangıç' },
-  { value: 'intermediate', label: 'Orta Seviye' },
-  { value: 'advanced', label: 'İleri Seviye' },
+  { value: "beginner", label: "Başlangıç" },
+  { value: "intermediate", label: "Orta Seviye" },
+  { value: "advanced", label: "İleri Seviye" },
 ];
 
 const numberFields = [
-  { name: 'age', label: 'Yaş', placeholder: '28', min: 14, max: 80 },
-  { name: 'weight', label: 'Kilo (kg)', placeholder: '72', min: 30, max: 200 },
-  { name: 'height', label: 'Boy (cm)', placeholder: '175', min: 120, max: 230 },
+  { name: "age", label: "Yaş", placeholder: "28", min: 14, max: 80 },
+  { name: "weight", label: "Kilo (kg)", placeholder: "72", min: 30, max: 200 },
+  { name: "height", label: "Boy (cm)", placeholder: "175", min: 120, max: 230 },
 ];
 
-export default function UserProfileForm() {
-  const {
-    profile,
-    setProfile,
-    selectedGoal,
-    setPrimaryGoal,
-    runDecisionEngine,
-    errors,
-    isProcessing,
-  } = useFitnessStore();
-
+export default function UserProfileForm({
+  profile,
+  onChange,
+  onSubmit,
+  isProcessing,
+  errors,
+}) {
   const handleProfileChange = (event) => {
     const { name, value } = event.target;
-    setProfile({ [name]: value });
+    onChange?.({ [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    runDecisionEngine();
+    onSubmit?.();
   };
 
   return (
@@ -39,17 +35,24 @@ export default function UserProfileForm() {
       className="space-y-6 rounded-3xl border border-white/10 bg-slate-900/70 p-6 shadow-neon backdrop-blur-md"
     >
       <header>
-        <p className="text-sm uppercase tracking-wide text-brand-400">Başlangıç</p>
-        <h2 className="mt-1 font-display text-3xl text-white">Vücudunu ve hedeflerini tanımla</h2>
+        <p className="text-sm uppercase tracking-wide text-brand-400">
+          Başlangıç
+        </p>
+        <h2 className="mt-1 font-display text-3xl text-white">
+          Vücudunu ve hedeflerini tanımla
+        </h2>
         <p className="mt-2 text-sm text-slate-300">
-          Girdiğin veriler Karar Motoru'na (AHP + Regresyon) aktarılır ve 12 haftalık planın
-          kişiselleştirilir.
+          Girdiğin veriler Karar Motoru'na (AHP + Regresyon) aktarılır ve 12
+          haftalık planın kişiselleştirilir.
         </p>
       </header>
 
       <section className="grid gap-4 md:grid-cols-3">
         {numberFields.map(({ name, label, placeholder, min, max }) => (
-          <label key={name} className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+          <label
+            key={name}
+            className="flex flex-col gap-2 text-sm font-medium text-slate-200"
+          >
             {label}
             <input
               type="number"
@@ -98,9 +101,6 @@ export default function UserProfileForm() {
             <div className="mt-2 text-xl font-semibold text-brand-300">
               {profile.availability} gün
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              2 Gün: Full Body • 3 Gün: PPL • 4 Gün: Bölgesel • 5 Gün: Hibrit • 6 Gün: PPLx2
-            </p>
           </div>
         </label>
       </section>
@@ -108,10 +108,15 @@ export default function UserProfileForm() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-sm uppercase tracking-wide text-brand-400">Önceliklendirme</p>
-            <h3 className="font-display text-2xl text-white">Ana hedefin nedir?</h3>
+            <p className="text-sm uppercase tracking-wide text-brand-400">
+              Önceliklendirme
+            </p>
+            <h3 className="font-display text-2xl text-white">
+              Ana hedefin nedir?
+            </h3>
             <p className="text-sm text-slate-300">
-              Seçimine göre Karar Motoru (AHP) ağırlıkları otomatik hesaplayacaktır.
+              Seçimine göre Karar Motoru (AHP) ağırlıkları otomatik
+              hesaplayacaktır.
             </p>
           </div>
           <span className="rounded-full bg-brand-500/20 px-4 py-1 text-xs font-semibold text-brand-200">
@@ -123,8 +128,10 @@ export default function UserProfileForm() {
           <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
             Hedef Seçimi
             <select
-              value={selectedGoal}
-              onChange={(e) => setPrimaryGoal(e.target.value)}
+              value={profile.selectedGoal || CRITERIA[0]}
+              onChange={(e) =>
+                onChange?.({ selectedGoal: e.target.value })
+              }
               className="w-full rounded-xl border border-white/10 bg-slate-900 p-4 text-lg text-white outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-500/40"
             >
               {CRITERIA.map((criterion) => (
@@ -134,7 +141,7 @@ export default function UserProfileForm() {
               ))}
             </select>
           </label>
-          
+
           {/* ALT KISIMDAKİ PUAN GÖSTERGESİ BURADAYDI, ŞİMDİ SİLİNDİ */}
         </div>
       </section>
@@ -150,7 +157,7 @@ export default function UserProfileForm() {
         disabled={isProcessing}
         className="w-full rounded-2xl bg-brand-500 px-6 py-4 text-lg font-semibold uppercase tracking-wide text-white transition hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isProcessing ? 'Hesaplanıyor...' : 'Karar Motorunu Çalıştır'}
+        {isProcessing ? "Hesaplanıyor..." : "Karar Motorunu Çalıştır"}
       </button>
     </form>
   );
