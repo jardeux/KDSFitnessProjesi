@@ -11,7 +11,6 @@ Kullanıcının yaş, boy, kilo, deneyim ve hedeflerine göre **AHP + TOPSIS** t
 - ![Dashboard ve profil formu](public/profiledashboard.png)
 - ![Kas haritası ve bölgesel egzersizler](public/kasharitasi.png)
 - ![Haftalık plan ve split özeti](public/program.png)
-  > Kendi ekran görüntülerini `docs/` klasörüne ekleyebilir veya mevcut `public/` görsellerini güncelleyebilirsin.
 
 ## Özellikler
 
@@ -68,7 +67,6 @@ Geliştirme sunucusu genellikle `http://localhost:5173` üzerinde açılır.
 - Umut Şen
 - Berkay Kozar
 - Emre Göktuğ Türk
-<!-- Projedeki ekip üyelerini yukarıya ekleyin -->
 
 ## Lisans
 
