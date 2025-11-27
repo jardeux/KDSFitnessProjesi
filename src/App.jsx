@@ -20,7 +20,8 @@ function App() {
   const [planExplanation, setPlanExplanation] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState(null);
-  const [selectedExerciseFromPlan, setSelectedExerciseFromPlan] = useState(null);
+  const [selectedExerciseFromPlan, setSelectedExerciseFromPlan] =
+    useState(null);
   const atlasRef = useRef(null);
 
   const handleProfileChange = (updates) =>
@@ -51,7 +52,7 @@ function App() {
   const handleExerciseClick = (exercise) => {
     setSelectedExerciseFromPlan(exercise);
     if (atlasRef.current) {
-      atlasRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      atlasRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -67,9 +68,8 @@ function App() {
             <span className="text-brand-400">antrenman planı</span> oluştur
           </h1>
           <p className="text-base text-slate-300 lg:max-w-2xl">
-            Vücut verilerini ve hedef önceliklerini gir. AHP tabanlı Karar
-            Motoru programları sıralasın, regresyon ise 12 haftalık ilerlemeyi
-            projekte etsin.
+            Vücut verilerini ve hedef önceliklerini gir. TOPSIS tabanlı Karar
+            Motoru programı oluştursun.
           </p>
         </header>
 
@@ -83,8 +83,8 @@ function App() {
           />
           <div className="flex flex-col gap-6">
             <div ref={atlasRef}>
-              <RegionalExerciseSelector 
-                workoutPlan={workoutPlan} 
+              <RegionalExerciseSelector
+                workoutPlan={workoutPlan}
                 selectedExercise={selectedExerciseFromPlan}
                 onExerciseProcessed={() => setSelectedExerciseFromPlan(null)}
               />

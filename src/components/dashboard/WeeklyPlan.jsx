@@ -4,6 +4,39 @@ export default function WeeklyPlan({
   isProcessing,
   onExerciseClick,
 }) {
+  const deriveSplitLabel = (plan = []) => {
+    const textPool = plan.map((session = {}) =>
+      `${session.day || ""} ${session.focus || ""}`.toLowerCase()
+    );
+
+    const hasKeyword = (keyword) =>
+      textPool.some((text) => text.includes(keyword));
+
+    const hasPush = hasKeyword("push");
+    const hasPull = hasKeyword("pull");
+    const hasLegs = hasKeyword("legs");
+    const hasUpper = hasKeyword("upper");
+    const hasLower = hasKeyword("lower");
+    const hasFullBody = hasKeyword("full body");
+
+    if (hasPush && hasPull && hasLegs && hasUpper && hasLower) {
+      return "PPL + Upper/Lower";
+    }
+    if (hasPush && hasPull && hasLegs) {
+      return "PPL";
+    }
+    if (hasUpper && hasLower) {
+      return "Upper/Lower";
+    }
+    if (hasFullBody) {
+      return "Full Body";
+    }
+
+    return plan.length ? `${plan.length} günlük plan` : "Plan yok";
+  };
+
+  const splitLabel = deriveSplitLabel(workoutPlan);
+
   if (isProcessing) {
     return (
       <section className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 text-center text-slate-300">
@@ -46,7 +79,7 @@ export default function WeeklyPlan({
               Haftalık Antrenman
             </p>
             <h3 className="font-display text-3xl text-white">
-              Planlanan gün sayısı: {workoutPlan.length}
+              Planlanan split: {splitLabel}
             </h3>
           </div>
         </header>
