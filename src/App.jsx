@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import UserProfileForm from "./components/forms/UserProfileForm";
-import DecisionResults from "./components/dashboard/DecisionResults";
 import WeeklyPlan from "./components/dashboard/WeeklyPlan";
 import RegionalExerciseSelector from "./components/dashboard/RegionalExerciseSelector";
 import {
@@ -90,11 +89,6 @@ function App() {
                 onExerciseProcessed={() => setSelectedExerciseFromPlan(null)}
               />
             </div>
-            <DecisionResults
-              workoutPlan={workoutPlan}
-              isProcessing={isProcessing}
-              planExplanation={planExplanation}
-            />
             <WeeklyPlan
               workoutPlan={workoutPlan}
               planExplanation={planExplanation}
