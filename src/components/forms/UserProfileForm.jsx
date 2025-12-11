@@ -42,8 +42,9 @@ export default function UserProfileForm({
           Vücudunu ve hedeflerini tanımla
         </h2>
         <p className="mt-2 text-sm text-slate-300">
-          Girdiğin veriler Karar Motoru'na (AHP + Regresyon) aktarılır ve 12
-          haftalık planın kişiselleştirilir.
+          Girdiğin veriler Karar Motoru'na (TOPSIS) aktarılır. Yaş, boy, kilo ve
+          deneyim seviyene göre kriter ağırlıkları otomatik hesaplanır ve
+          kişiselleştirilmiş antrenman planın oluşturulur.
         </p>
       </header>
 
@@ -115,12 +116,12 @@ export default function UserProfileForm({
               Ana hedefin nedir?
             </h3>
             <p className="text-sm text-slate-300">
-              Seçimine göre Karar Motoru (AHP) ağırlıkları otomatik
+              Seçimine göre Karar Motoru kriter ağırlıklarını otomatik
               hesaplayacaktır.
             </p>
           </div>
           <span className="rounded-full bg-brand-500/20 px-4 py-1 text-xs font-semibold text-brand-200">
-            AHP girdisi
+            TOPSIS
           </span>
         </div>
 
@@ -141,8 +142,6 @@ export default function UserProfileForm({
               ))}
             </select>
           </label>
-
-          {/* ALT KISIMDAKİ PUAN GÖSTERGESİ BURADAYDI, ŞİMDİ SİLİNDİ */}
         </div>
       </section>
 

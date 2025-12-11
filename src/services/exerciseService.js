@@ -209,6 +209,108 @@ const BASE_TOPSIS_WEIGHTS = {
   jointSafety: 0.15,
 };
 
+/**
+ * Yaş, boy, kilo ve deneyim seviyesine göre dinamik kriter ağırlıklarını hesaplar
+ * @param {Object} profile - Kullanıcı profili (age, height, weight, experience)
+ * @returns {Object} Hesaplanmış kriter ağırlıkları
+ */
+const calculateDynamicWeights = (profile = {}) => {
+  const age = safeNumber(profile.age);
+  const height = safeNumber(profile.height);
+  const weight = safeNumber(profile.weight);
+  const bmi = calculateBmi(weight, height);
+  const experience = profile.experience || "beginner";
+
+  // Başlangıç ağırlıkları (varsayılan değerler)
+  let weights = { ...BASE_TOPSIS_WEIGHTS };
+
+  // YAŞ ETKİSİ
+  if (age) {
+    if (age >= 50) {
+      // Yaşlı kullanıcılar için eklem güvenliği ve stabilite öncelikli
+      weights.jointSafety += 0.15;
+      weights.stability += 0.1;
+      weights.tension -= 0.1;
+      weights.isolation -= 0.05;
+    } else if (age >= 40) {
+      // Orta yaş için dengeli yaklaşım
+      weights.jointSafety += 0.08;
+      weights.stability += 0.05;
+      weights.tension -= 0.05;
+    } else if (age <= 25) {
+      // Genç kullanıcılar için tension ve isolation öncelikli
+      weights.tension += 0.1;
+      weights.isolation += 0.05;
+      weights.jointSafety -= 0.05;
+    }
+  }
+
+  // BMI ETKİSİ
+  if (bmi) {
+    if (bmi >= 30) {
+      // Obezite için eklem güvenliği ve stabilite kritik
+      weights.jointSafety += 0.12;
+      weights.stability += 0.08;
+      weights.resistanceCurve += 0.05;
+      weights.tension -= 0.1;
+      weights.isolation -= 0.05;
+    } else if (bmi >= 25) {
+      // Fazla kilolu için orta seviye ayarlamalar
+      weights.jointSafety += 0.06;
+      weights.stability += 0.04;
+      weights.tension -= 0.05;
+    } else if (bmi <= 19) {
+      // Zayıf kullanıcılar için tension ve isolation öncelikli
+      weights.tension += 0.08;
+      weights.isolation += 0.05;
+      weights.jointSafety -= 0.03;
+    }
+  }
+
+  // BOY ETKİSİ
+  if (height) {
+    const heightM = height > 3 ? height / 100 : height;
+    if (heightM >= 1.90) {
+      // Uzun boylu için stabilite ve eklem güvenliği önemli
+      weights.stability += 0.08;
+      weights.jointSafety += 0.05;
+      weights.tension -= 0.03;
+    } else if (heightM <= 1.60) {
+      // Kısa boylu için tension ve isolation avantajlı
+      weights.tension += 0.05;
+      weights.isolation += 0.03;
+    }
+  }
+
+  // DENEYİM SEVİYESİ ETKİSİ
+  if (experience === "beginner") {
+    // Başlangıç seviyesi için güvenlik ve stabilite öncelikli
+    weights.jointSafety += 0.1;
+    weights.stability += 0.08;
+    weights.resistanceCurve += 0.05;
+    weights.tension -= 0.1;
+    weights.isolation -= 0.05;
+  } else if (experience === "intermediate") {
+    // Orta seviye için dengeli yaklaşım (küçük ayarlamalar)
+    weights.tension += 0.03;
+    weights.isolation += 0.02;
+  } else if (experience === "advanced") {
+    // İleri seviye için tension ve isolation öncelikli
+    weights.tension += 0.12;
+    weights.isolation += 0.08;
+    weights.resistanceCurve += 0.05;
+    weights.jointSafety -= 0.05;
+    weights.stability -= 0.05;
+  }
+
+  // Negatif değerleri önle ve normalize et
+  Object.keys(weights).forEach((key) => {
+    weights[key] = Math.max(0.05, weights[key]); // Minimum %5
+  });
+
+  return normalizeWeights(weights);
+};
+
 // --- ANA FONKSİYON: Lokal veriyi filtreliyor ---
 export const fetchExercises = async ({
   filter = "cardio",
@@ -302,14 +404,14 @@ export const fetchAllExercises = async () => {
 export const optimizeHypertrophyTOPSIS = (exerciseList = [], profile = {}) => {
   if (!exerciseList.length) return exerciseList;
 
-  // 1) Kriter ağırlıkları
-  const baseWeights = { ...BASE_TOPSIS_WEIGHTS };
-  const { scoreBias, weightBias } = deriveProfileBias(profile);
-  const weights = normalizeWeights(
-    Object.fromEntries(
-      Object.entries(baseWeights).map(([k, v]) => [k, v * (weightBias[k] || 1)])
-    )
-  );
+  // 1) Yaş, boy, kilo ve deneyim seviyesine göre dinamik ağırlıkları hesapla
+  const dynamicWeights = calculateDynamicWeights(profile);
+
+  // 2) Profil bazlı score bias uygula (egzersiz puanlaması için)
+  const { scoreBias } = deriveProfileBias(profile);
+  
+  // Ağırlıklar zaten dinamik olarak hesaplandı, direkt kullan
+  const weights = dynamicWeights;
 
   // 2) Ekipmana göre bilimsel puanlama
   const equipmentScores = {
@@ -599,7 +701,16 @@ const buildExplanation = ({ profile, weights, ranked, days }) => {
   const sortedCriteria = Object.entries(weights)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
-    .map(([key, val]) => `${key} (${(val * 100).toFixed(0)}%)`)
+    .map(([key, val]) => {
+      const labels = {
+        tension: "Mekanik Gerilim",
+        stability: "Stabilizasyon",
+        isolation: "Kas İzolasyonu",
+        resistanceCurve: "Direnç Eğrisi",
+        jointSafety: "Eklem Güvenliği",
+      };
+      return `${labels[key] || key} (${(val * 100).toFixed(0)}%)`;
+    })
     .join(", ");
 
   const topExercises = ranked
@@ -619,10 +730,10 @@ const buildExplanation = ({ profile, weights, ranked, days }) => {
 
   return (
     `Profil: ${age}, ${height}, ${weight}, deneyim: ${experience}, hedef: ${goal}. ` +
-    `TOPSIS kriter önceliği: ${sortedCriteria}. ` +
-    `Öncelikli ilk 5 hareket: ${topExercises}. ` +
+    `Yaş, boy, kilo ve deneyim seviyene göre hesaplanan kriter önceliği: ${sortedCriteria}. ` +
+    `TOPSIS algoritması ile sıralanan ilk 5 hareket: ${topExercises}. ` +
     `Günlere dağılım: ${dayHighlights}. ` +
-    `Seçimler, hedef ve deneyim seviyene göre frekans/yoğunluk ayarlanarak optimize edildi.`
+    `Seçimler, profil bazlı dinamik ağırlıklar ve TOPSIS skorlaması ile optimize edildi.`
   );
 };
 
@@ -717,18 +828,12 @@ export const buildTopsisWorkoutProgram = ({
     };
   });
 
-  const adjustedWeights = normalizeWeights(
-    Object.fromEntries(
-      Object.entries(BASE_TOPSIS_WEIGHTS).map(([k, v]) => [
-        k,
-        v * (deriveProfileBias(profile).weightBias[k] || 1),
-      ])
-    )
-  );
+  // Dinamik ağırlıkları hesapla (yaş, boy, kilo, deneyim seviyesine göre)
+  const dynamicWeights = calculateDynamicWeights(profile);
 
   const explanation = buildExplanation({
     profile,
-    weights: adjustedWeights,
+    weights: dynamicWeights,
     ranked,
     days,
   });

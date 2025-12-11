@@ -69,7 +69,8 @@ function App() {
           </h1>
           <p className="text-base text-slate-300 lg:max-w-2xl">
             Vücut verilerini ve hedef önceliklerini gir. TOPSIS tabanlı Karar
-            Motoru programı oluştursun.
+            Motoru, yaş, boy, kilo ve deneyim seviyene göre programı
+            oluştursun.
           </p>
         </header>
 
